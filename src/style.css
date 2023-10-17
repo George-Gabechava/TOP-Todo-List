@@ -1,0 +1,91 @@
+/* mobile friendly CSS */
+@media (max-width:960px) {
+
+
+
+
+    /*footer styling */
+    #footContain {
+        display: flex;
+        flex-direction: column;
+
+        justify-content: space-around;
+        align-items: center;
+        background-color: cyan;
+        padding: 10px;
+    }
+
+ 
+
+}
+
+@media (max-width:500px) {
+    
+    .tab {
+        min-width: 30%;
+    }
+
+}
+
+
+
+
+/* General CSS */
+/*header styling */
+#container {
+    background-color: red;
+}
+
+#headContain {
+    display: flex;
+    justify-content: space-around;
+
+    background-color: turquoise;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    padding-left: 10px;
+    margin-right: -10px;
+
+
+
+}
+
+.tab {
+    display: flex;
+    padding: 20px;
+    border: solid blue 3px;
+    background-color: lightgray;    
+    justify-content: center;
+    font-weight: bold;
+    font-size: large;
+
+    margin-right: 10px;
+
+    flex: 0 1 20%;
+
+}
+
+/*body styling */
+html,body
+{
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+
+
+/*footer styling */
+#footContain {
+    display: flex;
+    justify-content: space-around;
+    background-color: cyan;
+    padding: 10px;
+
+
+    
+}
+
+#footContain a:visited {
+}
