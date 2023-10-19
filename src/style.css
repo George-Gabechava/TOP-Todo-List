@@ -2,8 +2,6 @@
 @media (max-width:960px) {
 
 
-
-
     /*footer styling */
     #footContain {
         display: flex;
@@ -14,8 +12,6 @@
         background-color: cyan;
         padding: 10px;
     }
-
- 
 
 }
 
@@ -44,11 +40,6 @@
     padding-top: 10px;
     padding-bottom: 10px;
 
-    padding-left: 10px;
-    margin-right: -10px;
-
-
-
 }
 
 .tab {
@@ -57,22 +48,28 @@
     border: solid blue 3px;
     background-color: lightgray;    
     justify-content: center;
+    align-items: center;
     font-weight: bold;
     font-size: large;
-
-    margin-right: 10px;
+    border-radius: 30px;
 
     flex: 0 1 20%;
 
 }
 
+.tab:hover {
+    background-color: antiquewhite;
+}
+
+.tab:active {
+    background-color: white;
+    box-shadow: 0 2px #666;
+    transform: translateY(4px);
+}
+
 /*body styling */
-html,body
-{
-    width: 100%;
-    height: 100%;
-    margin: 0px;
-    padding: 0px;
+body {
+    background-color: lightgray;
 }
 
 
@@ -88,4 +85,5 @@ html,body
 }
 
 #footContain a:visited {
+
 }
