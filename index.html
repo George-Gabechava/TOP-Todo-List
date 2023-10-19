@@ -9,7 +9,7 @@
     <div id="container">
         <div id="headContain">
             <button class="tab" id="showProjects">Show Projects</button>
-            <button class="tab" id="addToDo">Add To Do</button>
+            <button class="tab" id="addToDo" onclick="openTaskForm">Add To Do</button>
             <button class="tab" id="extraButton">Extra Button</button>
         </div>
 
@@ -18,13 +18,56 @@
             Start with a default project that can be renamed in tab1 selection.
             Would be cool if tab1 selection was a popup or transitions from side of screen.
         -->
-        <div id="content"></div>
+        <div id="content">
+          <p> </p>
+        </div>
+
+        <div class="formPopup" id="todoForm">
+          <form method="post" class="formContainer">
+            <div class="todoContainer">
+                <span class="closeBtn" id="todoClose" onclick="closeForm()">&times;</span>
+                <div class="form-row">
+                  <h2>Add To Do:</h2>
+                </div class="form-row">
+                <div class="form-row" id="form-row-1">
+                    <label for="taskTitle">To Do *</label>
+                    <input type="text" id="taskTitle" name="taskTitle" required />
+                </div class="form-row">
+                <div class="form-row">
+                    <label for="taskPriority">Priority (1-10)</label>
+                    <input type="number" id="taskPriority" name="taskPriority" placeholder="5 = default" />
+                </div class="form-row">
+                <div class="form-row">
+                  <label for="Due Date">Due Date</label>
+                  <input type="text" id="Due Date" name="Due Date"/>
+                </div class="form-row">
+                <div class="form-row">
+                    <label for="taskDescription">Description</label>
+                    <textarea type="text" id="taskDescription" name="taskDescription"></textarea>
+                </div class="form-row">
+                <div class="form-row">
+                  <p>* = required</p>
+                </div class="form-row">
+
+                <div class="form-row">
+                  <input type="submit" value="Add To Do" id="submitTodo" onclick="localAddTask()"/>
+                </div class="form-row">
+
+            </div>
+          
+            
+          </form>
+        </div>
+
+
 
         <div id="footContain">
+            <p>Your To Do list is only stored locally!</p>
             <p>Made by <a href=https://github.com/George-Gabechava>George-Gabechava</a> for The Odin Project</p>
             <p>Github <a href=https://github.com/George-Gabechava/TOP-restaurantPage>Source Code</a></p>
-            <p>Your project files are stored locally.</p>
         </div>    
+
+
         
     </div>
 
