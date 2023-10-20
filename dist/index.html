@@ -10,7 +10,7 @@
         <div id="headContain">
             <button class="tab" id="showProjects">Show Projects</button>
             <button class="tab" id="addToDo" onclick="openTaskForm">Add To Do</button>
-            <button class="tab" id="extraButton">Extra Button</button>
+            <!-- <button class="tab" id="extraButton">Extra Button</button> -->
         </div>
 
         <!--
@@ -30,27 +30,27 @@
                   <h2>Add To Do:</h2>
                 </div class="form-row">
                 <div class="form-row" id="form-row-1">
-                    <label for="taskTitle">To Do *</label>
+                    <label for="taskTitle">Task Name *</label>
                     <input type="text" id="taskTitle" name="taskTitle" required />
                 </div class="form-row">
                 <div class="form-row">
                     <label for="taskPriority">Priority (1-10)</label>
-                    <input type="number" id="taskPriority" name="taskPriority" placeholder="5 = default" />
+                    <input type="number" id="taskPriority" name="taskPriority" placeholder="5 = default" max="10" min="1"/>
                 </div class="form-row">
                 <div class="form-row">
                   <label for="Due Date">Due Date</label>
-                  <input type="text" id="Due Date" name="Due Date"/>
+                  <input type="date" id="Due Date" name="Due Date"/>
                 </div class="form-row">
                 <div class="form-row">
                     <label for="taskDescription">Description</label>
-                    <textarea type="text" id="taskDescription" name="taskDescription"></textarea>
+                    <textarea type="textarea" id="taskDescription" name="taskDescription"></textarea>
                 </div class="form-row">
                 <div class="form-row">
                   <p>* = required</p>
                 </div class="form-row">
 
                 <div class="form-row">
-                  <input type="submit" value="Add To Do" id="submitTodo" onclick="localAddTask()"/>
+                  <input type="submit" value="Add To Do" id="submitTodo" onclick="createTask()"/>
                 </div class="form-row">
 
             </div>

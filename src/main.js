@@ -45,6 +45,10 @@ currentProject();
 
 //Create a To Do Task
 function createTask(title, description, dueDate, priority) {
+    if (priority == '' || priority == undefined) {
+        //set default priority to 5 if empty
+        priority = 5;
+    }
     return {
         title,
         description,
@@ -55,6 +59,9 @@ function createTask(title, description, dueDate, priority) {
 
 //Asign the To Do task to the current project
 function assignTask(task) {
+    //create task function
+    
+
     //Find current open project
     const findProjectIndex = myProjects.findIndex(object => object.projectName === `${currentProject()}`);
 
@@ -62,13 +69,16 @@ function assignTask(task) {
     myProjects[findProjectIndex].taskList.push(task);
     
     console.log("current taskList", myProjects[findProjectIndex].taskList);
-    
 }
+
+
+
+
 
 //Dummy Tasks for testing
 const task1 = createTask('Code this assignment', 'This TOP assignment', 3, 10);
 assignTask(task1);
-const task2 = createTask('grocery shopping', '', 4, 9);
+const task2 = createTask('grocery shopping', '', 4, );
 assignTask(task2);
 
 window.task = createTask('gym every day', '', 1, 7);
