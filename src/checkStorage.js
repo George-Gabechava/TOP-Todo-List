@@ -1,4 +1,6 @@
 //Check to see if localStorage is available:
+window.storageStatus = '';
+
 function storageAvailable(type) {
     let storage;
     try {
@@ -31,16 +33,10 @@ function storageAvailable(type) {
 export function isStorageAvailable() {
     if (storageAvailable("localStorage")) {
         //localStorage is available!
-        console.log("Ladies and Gentlemen, we got 'em.");
-
-        //run functions to create To Do list that can save
-
+        storageStatus = "available";
     }
     else {
         // No localStorage available.
-        console.log("We don't got 'em.");
-
-        //run functions to create To Do list that cannot save
-
+        storageStatus = "unavailable";
     }
 }

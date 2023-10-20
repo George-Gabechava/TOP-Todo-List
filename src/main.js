@@ -1,13 +1,15 @@
 import { format, compareAsc } from 'date-fns';
 import { isStorageAvailable } from './checkStorage';
 
+//clear localStorage as if I'm a new user
+localStorage.clear();
+
 //check if localStorage is available
 isStorageAvailable();
+console.log("localStorage:", storageStatus, ";length:", localStorage.length);
+
 
 //Lit of Project Groups
-///////////////// THE WINDOW'S OPEN
-window.myProjects = [];
-
 
 ////Functions for the To Do List
 ////Each project / To Do item should be editable, deletable, & completable.
@@ -17,38 +19,45 @@ function createProject(name) {
     const projectName = name;
     const taskList = [];
 
-    return {projectName, taskList};
+
+    localStorage.setItem(projectName, JSON.stringify(taskList));
 }
 
 //Currently selected project group
 //Show Projects button UI should allow user to select 
+
 function currentProject() {
-    //localStorage not implemented yet, set current project to 'default'
-    //if myProjects in localStorage is empty:
+    //check if localStorage is available
+    isStorageAvailable();
 
-    return Personal.projectName;
+    //if localStorage is empty & available: create a project "Personal"
+    if (localStorage.length == 0 ) {
+        const Personal = createProject('Personal');
 
-    //else, load myProjects from localStorage
-    //'some code'
+        localStorage.setItem("Current Project", JSON.stringify("Personal"));
+        return "Personal";
+    }
+    
+    //if localStorage is populated & available: select (most recent/first one?)
+    if (localStorage.length > 0 && storageStatus == "available") {
+        return JSON.parse(localStorage.getItem("Current Project"));
+    }
+
+
+    //if local storage is unavailable
+    if (storageStatus == "unavailable") {
+        //some code. Maybe an alert? Or innerText alert?
+    }
+
 }
 
-///////// Dummy Projects for Testing
-const Personal = createProject('Personal');
-myProjects.push(Personal);
-
-const Work = createProject('Work');
-myProjects.push(Work);
-
-//Set Current Project on Home Page to Personal for testing
-currentProject();
-
-
 //Create a To Do Task
-function createTask(title, description, dueDate, priority) {
+export function createTask(title, description, dueDate, priority) {
     if (priority == '' || priority == undefined) {
         //set default priority to 5 if empty
         priority = 5;
     }
+
     return {
         title,
         description,
@@ -58,32 +67,55 @@ function createTask(title, description, dueDate, priority) {
 }
 
 //Asign the To Do task to the current project
-function assignTask(task) {
+function assignTask(title, description, dueDate, priority) {
     //create task function
-    
+    const mytask = createTask(title, description, dueDate, priority);
 
     //Find current open project
-    const findProjectIndex = myProjects.findIndex(object => object.projectName === `${currentProject()}`);
+    const personalTasklist = JSON.parse(localStorage.getItem(currentProject()));
+
+    
+
+    // const findProjectIndex = myProjects.findIndex(object => object.projectName === `${currentProject()}`);
 
     //Add task to current project
-    myProjects[findProjectIndex].taskList.push(task);
+    personalTasklist.push(mytask);
+
+    // myProjects[findProjectIndex].taskList.push(task);
     
-    console.log("current taskList", myProjects[findProjectIndex].taskList);
+    // console.log("current taskList", myProjects[findProjectIndex].taskList);
+
+    //Add task to localStorage
+    localStorage.setItem(currentProject(), JSON.stringify(personalTasklist));
+    console.log("myTaskList", personalTasklist);
 }
 
 
+function closeForm() {
+    const closeBtn = document.querySelector(todoClose);
+    closeBtn.addEventListener('click', tab1Function);
 
+    formPopup.display = "none";
+}
 
 
 //Dummy Tasks for testing
-const task1 = createTask('Code this assignment', 'This TOP assignment', 3, 10);
-assignTask(task1);
-const task2 = createTask('grocery shopping', '', 4, );
-assignTask(task2);
+//Set Current Project on Home Page to Personal for testing
+currentProject();
 
-window.task = createTask('gym every day', '', 1, 7);
-window.task4 = createTask('sleep 8 hours', 'zzz', 6, 6);
-
-console.log("myProjects", myProjects);
+// window.task1c = createTask('Code this assignment', 'This TOP assignment', 3, 10);
+assignTask('Code this assignment', 'This TOP assignment', 3, 10);
 
 
+// const task1 = createTask('Code this assignment', 'This TOP assignment', 3, 10);
+// assignTask(task1);
+
+assignTask('grocery shopping', 'a description', 4, );
+// const task2 = createTask('grocery shopping', '', 4, );
+// assignTask(task2);
+
+// window.task = createTask('gym every day', '', 1, 7);
+// window.task4 = createTask('sleep 8 hours', 'zzz', 6, 6);
+
+
+console.log("final Personal parse",JSON.parse(localStorage.getItem("Personal")));
