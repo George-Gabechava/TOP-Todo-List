@@ -90,16 +90,34 @@ function assignTask(title, description, dueDate, priority) {
     console.log("myTaskList", personalTasklist);
 }
 
+////UI Logic
+//Show Projects
+//some code
 
-function closeForm() {
-    const closeBtn = document.querySelector(todoClose);
-    closeBtn.addEventListener('click', tab1Function);
 
-    formPopup.display = "none";
-}
+//Add To Do Button
+const addToDoBtn = document.querySelector("#addToDo");
+const formPopup = document.querySelector("#todoForm");
+
+addToDoBtn.addEventListener('click', () => {
+        formPopup.style.display = "block";
+});
+
+//Popup 
+const closeBtn = document.querySelector("#todoClose");
+closeBtn.addEventListener('click', () => {
+    formPopup.style.display = "none";
+});
+
+
+
+
 
 
 //Dummy Tasks for testing
+// closeBtn.click();
+
+
 //Set Current Project on Home Page to Personal for testing
 currentProject();
 

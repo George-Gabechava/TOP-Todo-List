@@ -179,13 +179,14 @@ body {
 #footContain {
     display: flex;
     justify-content: space-around;
+    align-items: center;
     background-color: cyan;
     padding: 10px;
-
 
     
 }
 
-#footContain a:visited {
-
+#footContain p {
+    text-align: center;
+    line-height: 20px;
 }
