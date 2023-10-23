@@ -85,15 +85,11 @@ function assignTask(title, description, dueDate, priority) {
     const month0 = (mytask.dueDate).substr(0,2);
     const day0 = (mytask.dueDate).substr(3,2);
     const currentTaskDate = new Date(year0, month0, day0);
-    console.log('current', currentTaskDate);
 
     const currentTaskLength = Tasklist.length;
 
     for (let i = 0; i < currentTaskLength; i++) {
         console.log("i & len:", i, "&", currentTaskLength);
-        console.log("Tasklist i prio & date:", Tasklist[i].priority, " - ",  Tasklist[i].dueDate);
-
-        console.log("mytask prio & date:", mytask.priority, " - ",  mytask.dueDate);
 
         //if higher priority, add task
         if (mytask.priority > Tasklist[i].priority ) {
@@ -163,31 +159,80 @@ todoForm.addEventListener("submit", (e) => {
 
     const newFormDuetDate = month + " " + day + " " + year;
 
-    console.log("old new", formDueDate, newFormDuetDate);
-
     //assignTask from here
     assignTask(formTitle, formDescription, newFormDuetDate, formPriority);
 
+    //clear previous table
+    var child = content.lastElementChild;  
+    while (child) { 
+        content.removeChild(child); 
+        child = content.lastElementChild; 
+    }
+
     //add task to UI
+    addTaskUI(formTitle, formDescription, newFormDuetDate, formPriority);
 
     //close form if neccesary?
     closeBtn.click();
 
-
 });
 
+const content = document.getElementById("content");
 
 //add To Dos to UI
 function addTaskUI(title, description, dueDate, priority) {
+    let header = document.createElement('h2');
+    header.innerText = currentProject();
+    content.appendChild(header);
+    header.style.textAlign = "center";
+    let table = document.createElement('table');
+
+    const Tasklist = JSON.parse(localStorage.getItem(currentProject()));
+
+    //Header
+    table.insertRow();
+    let cell01 = table.rows[0].insertCell();
+    cell01.textContent = "Title";
+    let cell02 = table.rows[0].insertCell();
+    cell02.textContent = "Priority";
+    let cell03 = table.rows[0].insertCell();
+    cell03.textContent = "Due Date";
+    let cell04 = table.rows[0].insertCell();
+    cell04.textContent = "Description";
+    let cell06 = table.rows[0].insertCell();
+    cell06.textContent = "Edit";
+    let cell07 = table.rows[0].insertCell();
+    cell07.textContent = "Delete";
+
+
+
+    for (let row = 0; row < Tasklist.length; row++) {
+        table.insertRow();
+        //Display Data
+        let newCell = table.rows[table.rows.length - 1].insertCell();
+        newCell.textContent = Tasklist[row].title;
+        let newCell2 = table.rows[table.rows.length - 1].insertCell();
+        newCell2.textContent = Tasklist[row].priority;
+        let newCell3 = table.rows[table.rows.length - 1].insertCell();
+        newCell3.textContent = Tasklist[row].dueDate;
+        let newCell4 = table.rows[table.rows.length - 1].insertCell();
+        newCell4.textContent = Tasklist[row].description;
+
+        //Display Buttons
+        let newCell5 = table.rows[table.rows.length - 1].insertCell();
+        let button1 = document.createElement('button');
+        newCell5.append(button1);
+        let newCell6 = table.rows[table.rows.length - 1].insertCell();
+        let button2 = document.createElement('button');
+        newCell6.append(button2);
+    }
+
+
+    content.appendChild(table);
     
 }
 
-
-
-
 //Dummy Tasks for testing
-closeBtn.click();
-
 
 //Set Current Project on Home Page to Personal for testing
 currentProject();
@@ -195,14 +240,14 @@ currentProject();
 
 assignTask('grocery shopping', 'a description', "11 30 2023", 2);
 
-assignTask('Code this assignment', 'This TOP assignment', "11 01 2023", 2);
-
-assignTask('something', '', "11 02 2023", 1);
+assignTask('something', '', "", 2);
 
 
+// assignTask('Code this assignment', 'This TOP assignment', "11 01 2023", 2);
 
 // assignTask('gym every day', '', '', 7);
 
-window.task4 = assignTask('sleep 8 hours', 'zzz', '', 2);
+// window.task4 = assignTask('sleep 8 hours', 'zzz', '', 2);
 
+addTaskUI();
 console.log("final Personal parse",JSON.parse(localStorage.getItem("Personal")));
