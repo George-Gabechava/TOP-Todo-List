@@ -1,4 +1,4 @@
-import { format, compareAsc } from 'date-fns';
+import { compareAsc, format } from 'date-fns';
 import { isStorageAvailable } from './checkStorage';
 
 //clear localStorage as if I'm a new user
@@ -72,25 +72,63 @@ function assignTask(title, description, dueDate, priority) {
     const mytask = createTask(title, description, dueDate, priority);
 
     //Find current open project
-    const personalTasklist = JSON.parse(localStorage.getItem(currentProject()));
+    const Tasklist = JSON.parse(localStorage.getItem(currentProject()));
 
-    
+    //find out where task belongs in current project priority
+    if (Tasklist.length == 0) {
+        Tasklist.push(mytask);
+        localStorage.setItem(currentProject(), JSON.stringify(Tasklist));
+        return;
+    }
 
-    // const findProjectIndex = myProjects.findIndex(object => object.projectName === `${currentProject()}`);
+    const year0 = (mytask.dueDate).substr(-4,4);
+    const month0 = (mytask.dueDate).substr(0,2);
+    const day0 = (mytask.dueDate).substr(3,2);
+    const currentTaskDate = new Date(year0, month0, day0);
+    console.log('current', currentTaskDate);
 
-    //Add task to current project
-    personalTasklist.push(mytask);
+    const currentTaskLength = Tasklist.length;
 
-    // myProjects[findProjectIndex].taskList.push(task);
-    
-    // console.log("current taskList", myProjects[findProjectIndex].taskList);
+    for (let i = 0; i < currentTaskLength; i++) {
+        console.log("i & len:", i, "&", currentTaskLength);
+        console.log("Tasklist i prio & date:", Tasklist[i].priority, " - ",  Tasklist[i].dueDate);
+
+        console.log("mytask prio & date:", mytask.priority, " - ",  mytask.dueDate);
+
+        //if higher priority, add task
+        if (mytask.priority > Tasklist[i].priority ) {
+            Tasklist.splice([i], 0, mytask);
+            break;
+        }
+
+        //check if current Index Due Date is later than new task Due Date
+        const yearI = (Tasklist[i].dueDate).substr(-4,4);
+        const monthI = (Tasklist[i].dueDate).substr(0,2);
+        const dayI = (Tasklist[i].dueDate).substr(3,2);
+        const IndexTaskDate = new Date(yearI, monthI, dayI);
+
+        const compared = compareAsc(currentTaskDate, IndexTaskDate);
+
+        //if same priority, but sooner due date, add task
+        if (mytask.priority == Tasklist[i].priority && compared == -1 && mytask.dueDate != '') {
+            Tasklist.splice([i], 0, mytask);
+            break;
+        }
+
+        //Else, add new task to the end of the list (lowest priority)
+        if (i == currentTaskLength -1) {
+            Tasklist.push(mytask);
+        }
+    }
+
 
     //Add task to localStorage
-    localStorage.setItem(currentProject(), JSON.stringify(personalTasklist));
-    console.log("myTaskList", personalTasklist);
+    localStorage.setItem(currentProject(), JSON.stringify(Tasklist));
+    console.log("myTaskList", Tasklist);
 }
 
 ////UI Logic
+
 //Show Projects
 //some code
 
@@ -109,31 +147,62 @@ closeBtn.addEventListener('click', () => {
     formPopup.style.display = "none";
 });
 
+//submit form
+const todoForm = document.querySelector("#todoForm");
+todoForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const formTitle = document.getElementById("taskTitle").value;
+    const formPriority = document.getElementById("taskPriority").value;
+    const formDueDate = document.getElementById("taskDueDate").value;
+    const formDescription = document.getElementById("taskDescription").value;
 
+    //get date in preferred format
+    const year = formDueDate.substr(0,4);
+    const month = formDueDate.substr(5,2);
+    const day = formDueDate.substr(-2,2);
+
+    const newFormDuetDate = month + " " + day + " " + year;
+
+    console.log("old new", formDueDate, newFormDuetDate);
+
+    //assignTask from here
+    assignTask(formTitle, formDescription, newFormDuetDate, formPriority);
+
+    //add task to UI
+
+    //close form if neccesary?
+    closeBtn.click();
+
+
+});
+
+
+//add To Dos to UI
+function addTaskUI(title, description, dueDate, priority) {
+    
+}
 
 
 
 
 //Dummy Tasks for testing
-// closeBtn.click();
+closeBtn.click();
 
 
 //Set Current Project on Home Page to Personal for testing
 currentProject();
 
-// window.task1c = createTask('Code this assignment', 'This TOP assignment', 3, 10);
-assignTask('Code this assignment', 'This TOP assignment', 3, 10);
+
+assignTask('grocery shopping', 'a description', "11 30 2023", 2);
+
+assignTask('Code this assignment', 'This TOP assignment', "11 01 2023", 2);
+
+assignTask('something', '', "11 02 2023", 1);
 
 
-// const task1 = createTask('Code this assignment', 'This TOP assignment', 3, 10);
-// assignTask(task1);
 
-assignTask('grocery shopping', 'a description', 4, );
-// const task2 = createTask('grocery shopping', '', 4, );
-// assignTask(task2);
+// assignTask('gym every day', '', '', 7);
 
-// window.task = createTask('gym every day', '', 1, 7);
-// window.task4 = createTask('sleep 8 hours', 'zzz', 6, 6);
-
+window.task4 = assignTask('sleep 8 hours', 'zzz', '', 2);
 
 console.log("final Personal parse",JSON.parse(localStorage.getItem("Personal")));
