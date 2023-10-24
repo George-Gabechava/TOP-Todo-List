@@ -21,6 +21,9 @@ function createProject(name) {
 
 
     localStorage.setItem(projectName, JSON.stringify(taskList));
+    localStorage.setItem("Current Project", JSON.stringify(name));
+
+
 }
 
 //Currently selected project group
@@ -40,7 +43,11 @@ function currentProject() {
     
     //if localStorage is populated & available: select (most recent/first one?)
     if (localStorage.length > 0 && storageStatus == "available") {
-        return JSON.parse(localStorage.getItem("Current Project"));
+        const currentProject = JSON.parse(localStorage.getItem("Current Project"));
+
+        localStorage.setItem("Current Project", JSON.stringify(currentProject));
+
+        return currentProject;
     }
 
 
@@ -132,19 +139,32 @@ function assignTask(title, description, dueDate, priority) {
 //Add To Do Button
 const addToDoBtn = document.querySelector("#addToDo");
 const formPopup = document.querySelector("#todoForm");
-
 addToDoBtn.addEventListener('click', () => {
         formPopup.style.display = "block";
 });
 
-//Popup 
+//Add show Projects Button
+const showProjectsBtn = document.querySelector("#showProjects");
+const projectsPopupForm = document.querySelector(".projectsPopup");
+
+showProjectsBtn.addEventListener('click', () => {
+    projectsPopupForm.style.display = "block";
+});
+
+//Popups Buttons
 const closeBtn = document.querySelector("#todoClose");
 closeBtn.addEventListener('click', () => {
     formPopup.style.display = "none";
 });
 
+const closeBtn2 = document.querySelector("#projectsClose");
+closeBtn2.addEventListener('click', () => {
+    projectsPopupForm.style.display = "none";
+});
+
 //submit form
 const todoForm = document.querySelector("#todoForm");
+
 todoForm.addEventListener("submit", (e) => {
     e.preventDefault();
     const formTitle = document.getElementById("taskTitle").value;
@@ -226,21 +246,41 @@ function addTaskUI(title, description, dueDate, priority) {
         let button2 = document.createElement('button');
         newCell6.append(button2);
     }
-
-
     content.appendChild(table);
-    
 }
+
+// Add Project UI
+const projectContent = document.getElementById("projectContent");
+
+const projectForm = document.querySelector("#addProjectForm");
+const submitProjectBtn = document.querySelector("#submitProject");
+
+submitProjectBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    console.log("plz");
+
+});
+
+// function addProjectUI(name) {
+//     console.log(name);
+//     createProject(name);
+
+// }
 
 //Dummy Tasks for testing
 
 //Set Current Project on Home Page to Personal for testing
+
+// addProjectUI("Work");
+createProject("Work");
+
 currentProject();
+
 
 
 assignTask('grocery shopping', 'a description', "11 30 2023", 2);
 
-assignTask('something', '', "", 2);
+// assignTask('something', '', "", 2);
 
 
 // assignTask('Code this assignment', 'This TOP assignment', "11 01 2023", 2);
@@ -250,4 +290,5 @@ assignTask('something', '', "", 2);
 // window.task4 = assignTask('sleep 8 hours', 'zzz', '', 2);
 
 addTaskUI();
-console.log("final Personal parse",JSON.parse(localStorage.getItem("Personal")));
+console.log("final", localStorage);
+// console.log("final Personal parse",JSON.parse(localStorage.getItem("Personal")));

@@ -44,7 +44,6 @@
                   <p>* = required</p>
                 </div class="form-row">
 
-                <!-- Footer-->
                 <div class="form-row">
                   <input type="submit" value="Add To Do" id="submitTodo"/>
                 </div class="form-row">
@@ -52,23 +51,38 @@
           </form>
         </div>
 
+        <!-- Show Projects Popup-->
+        <div class="projectsPopup" id="projectsPopupForm">
+          <div class="projectContainer">
+            <span class="closeBtn" id="projectsClose">&times;</span>
+            <form class="formContainer2">
+              <div class="form-row">
+                <label for="addProjectForm">New Project Name</label>
+                <input type="text" id="addProjectForm" name="addProjectForm" required/>
+              </div>
+              <div class="form-row">
+                <input type="submit" value="Add A Project" id="submitProject"/>
+              </div>
+            </form>
+
+            <div id="projectContent">
+
+            </div>
+          </div>
+        </div>
 
 
+        <!-- Footer-->
         <div id="footContain">
             <p>Your To Do list is only stored locally! <br> Don't actually use this website for something important!</p>
             <p>Made by <a href=https://github.com/George-Gabechava>George-Gabechava</a> for The Odin Project</p>
             <p>Github <a href=https://github.com/George-Gabechava/TOP-restaurantPage>Source Code</a></p>
         </div>    
-
-
-        
     </div>
-
   </body>
 
-  <footer>
-    
 
+  <footer>
     <script src="bundle.js"></script>
   </footer>
 </html>
