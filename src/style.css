@@ -42,14 +42,14 @@
 /* General CSS */
 /*header styling */
 #container {
-    background-color: lightcoral;
+    background-color: turquoise;
 }
 
 #headContain {
     display: flex;
     justify-content: space-around;
 
-    background-color: turquoise;
+    background-color: cyan;
     padding-top: 10px;
     padding-bottom: 10px;
 
@@ -179,12 +179,13 @@ body {
 /* Show Projects Popup Styling */
 .projectsPopup {
     display: none;
-    background-color: yellow;
+    background-color: lightblue;
     position: absolute;
     top: 0px;
     left: 0px;
     height: 100vh;
     width: 50vh;
+    border: solid black 3px;
 }
 
 .formContainer2 {
@@ -227,6 +228,7 @@ table td {
     background-color: white;
     border: solid black 1px;
     margin-top: 10px;
+    padding: 10px;
 }
 
 table button {

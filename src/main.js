@@ -434,7 +434,6 @@ function editProjectFunction() {
     }    
     addProjectUI();
 }
-localStorage.clear();
 //Set Current Project on Home Page to Personal if local Storage is empty
 currentProject();
 addTaskUI();
