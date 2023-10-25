@@ -96,8 +96,6 @@ function assignTask(title, description, dueDate, priority) {
     const currentTaskLength = Tasklist.length;
 
     for (let i = 0; i < currentTaskLength; i++) {
-        console.log("i & len:", i, "&", currentTaskLength);
-
         //if higher priority, add task
         if (mytask.priority > Tasklist[i].priority ) {
             Tasklist.splice([i], 0, mytask);
@@ -131,10 +129,6 @@ function assignTask(title, description, dueDate, priority) {
 }
 
 ////UI Logic
-
-//Show Projects
-//some code
-
 
 //Add To Do Button
 const addToDoBtn = document.querySelector("#addToDo");
@@ -182,13 +176,6 @@ todoForm.addEventListener("submit", (e) => {
     //assignTask from here
     assignTask(formTitle, formDescription, newFormDuetDate, formPriority);
 
-    //clear previous table
-    var child = content.lastElementChild;  
-    while (child) { 
-        content.removeChild(child); 
-        child = content.lastElementChild; 
-    }
-
     //add task to UI
     addTaskUI(formTitle, formDescription, newFormDuetDate, formPriority);
 
@@ -197,14 +184,22 @@ todoForm.addEventListener("submit", (e) => {
 
 });
 
+//add To Dos to UI
 const content = document.getElementById("content");
 
-//add To Dos to UI
 function addTaskUI(title, description, dueDate, priority) {
+    //clear previous table
+    var child = content.lastElementChild;  
+    while (child) { 
+        content.removeChild(child); 
+        child = content.lastElementChild; 
+    }
+
     let header = document.createElement('h2');
     header.innerText = currentProject();
     content.appendChild(header);
     header.style.textAlign = "center";
+
     let table = document.createElement('table');
 
     const Tasklist = JSON.parse(localStorage.getItem(currentProject()));
@@ -241,46 +236,131 @@ function addTaskUI(title, description, dueDate, priority) {
         //Display Buttons
         let newCell5 = table.rows[table.rows.length - 1].insertCell();
         let button1 = document.createElement('button');
+        // button1.addEventListener("click", editRowFunction);
         newCell5.append(button1);
         let newCell6 = table.rows[table.rows.length - 1].insertCell();
         let button2 = document.createElement('button');
+        button2.addEventListener("click", deleteRowFunction);
         newCell6.append(button2);
     }
     content.appendChild(table);
 }
 
+//delete task button
+function deleteRowFunction() {
+    const thisRow = this.parentNode.parentNode;
+    const thisRowIndex = thisRow.rowIndex - 1;
+    let Tasklist = JSON.parse(localStorage.getItem(currentProject()));
+
+    const projectName = currentProject();
+
+    Tasklist.splice(thisRowIndex, 1);
+    localStorage.setItem(projectName, JSON.stringify(Tasklist));
+    addTaskUI();
+
+}
+
 // Add Project UI
+//Create New Project Submit Button
 const projectContent = document.getElementById("projectContent");
 
-const projectForm = document.querySelector("#addProjectForm");
 const submitProjectBtn = document.querySelector("#submitProject");
 
 submitProjectBtn.addEventListener("click", (e) => {
     e.preventDefault();
-    console.log("plz");
+    //get value from input field
+    const projectTitle = document.getElementById("addProjectForm").value;
+    const projectTitleHTML = document.getElementById("addProjectForm");
 
+    
+
+    //create project from value & update UI
+    createProject(projectTitle);
+    addProjectUI(projectTitle);
+
+    //clear input field
+    projectTitleHTML.value = "";
 });
 
-// function addProjectUI(name) {
-//     console.log(name);
-//     createProject(name);
+//Add Project to UI
+function addProjectUI(name) {
+    //clear previous table
+    var child = projectContent.lastElementChild;  
+    while (child) { 
+    projectContent.removeChild(child); 
+    child = projectContent.lastElementChild; 
+}
+    //create table
+    let ptable = document.createElement('table');
 
-// }
+    ptable.insertRow();
+    let pcell1 = ptable.rows[0].insertCell();
+    pcell1.textContent = "Title";
+    let pcell2 = ptable.rows[0].insertCell();
+    pcell2.textContent = "Select";
+    let pcell3 = ptable.rows[0].insertCell();
+    pcell3.textContent = "Edit";
+    let pcell4 = ptable.rows[0].insertCell();
+    pcell4.textContent = "Delete";
+
+    const allKeys = Object.keys(localStorage);
+
+    for (let i = 0; i < localStorage.length; i++) {
+        let key = allKeys[i];
+        if (key != "Current Project") {
+            ptable.insertRow();
+            let pcell01 = ptable.rows[ptable.rows.length - 1].insertCell();
+            pcell01.textContent = key;
+
+            //Display Buttons
+            //select
+            let pcell02 = ptable.rows[ptable.rows.length - 1].insertCell();
+            let pbutton1 = document.createElement('button');
+            pcell02.append(pbutton1);
+            //edit
+            let pcell03 = ptable.rows[ptable.rows.length - 1].insertCell();
+            let pbutton2 = document.createElement('button');
+            pcell03.append(pbutton2);
+            //delete
+            let pcell04 = ptable.rows[ptable.rows.length - 1].insertCell();
+            let pbutton3 = document.createElement('button');
+            pbutton3.addEventListener("click", deleteProjectFunction);
+            pcell04.append(pbutton3);
+        }
+    }
+    projectContent.appendChild(ptable);
+}
+
+//delete project button
+function deleteProjectFunction() {
+    const thisRow = this.parentNode.parentNode;
+    const thisRowTitle = (thisRow.cells[0].innerText);
+    localStorage.removeItem(thisRowTitle);
+
+    // Tasklist.splice(thisRowIndex, 1);
+    // localStorage.setItem(projectName, JSON.stringify(Tasklist));
+    addProjectUI();
+
+}
+
+
 
 //Dummy Tasks for testing
 
 //Set Current Project on Home Page to Personal for testing
 
-// addProjectUI("Work");
-createProject("Work");
 
 currentProject();
 
 
+createProject("Work");
+
+addProjectUI("Work");
+
 
 assignTask('grocery shopping', 'a description', "11 30 2023", 2);
 
-// assignTask('something', '', "", 2);
+assignTask('something', '', "", 2);
 
 
 // assignTask('Code this assignment', 'This TOP assignment', "11 01 2023", 2);

@@ -178,6 +178,7 @@ body {
 
 /* Show Projects Popup Styling */
 .projectsPopup {
+    /* display: none; */
     background-color: yellow;
     position: absolute;
     top: 0px;
