@@ -1,9 +1,6 @@
 import { compareAsc, format } from 'date-fns';
 import { isStorageAvailable } from './checkStorage';
 
-//clear localStorage as if I'm a new user
-localStorage.clear();
-
 //check if localStorage is available
 isStorageAvailable();
 console.log("localStorage:", storageStatus, ";length:", localStorage.length);
@@ -184,6 +181,7 @@ todoForm.addEventListener("submit", (e) => {
 
 });
 
+
 //add To Dos to UI
 const content = document.getElementById("content");
 
@@ -236,7 +234,7 @@ function addTaskUI(title, description, dueDate, priority) {
         //Display Buttons
         let newCell5 = table.rows[table.rows.length - 1].insertCell();
         let button1 = document.createElement('button');
-        // button1.addEventListener("click", editRowFunction);
+        button1.addEventListener("click", editRowFunction);
         newCell5.append(button1);
         let newCell6 = table.rows[table.rows.length - 1].insertCell();
         let button2 = document.createElement('button');
@@ -244,6 +242,61 @@ function addTaskUI(title, description, dueDate, priority) {
         newCell6.append(button2);
     }
     content.appendChild(table);
+
+    //show button (editRowFunction hides it)
+    closeBtn.style.display = "flex";
+
+    //clear input fields from before
+    const projectTitleHTML = document.getElementById("taskTitle");
+    const projectPriorityHTML = document.getElementById("taskPriority");
+    const projectDueDateHTML = document.getElementById("taskDueDate");
+    const projectDescriptionHTML = document.getElementById("taskDescription");
+
+    projectTitleHTML.value = "";
+    projectPriorityHTML.value = "";
+    projectDueDateHTML.value = "";
+    projectDescriptionHTML.value = "";
+}
+
+//edit task button
+function editRowFunction() {
+    const thisRow = this.parentNode.parentNode;
+    const thisRowIndex = thisRow.rowIndex - 1;
+    let Tasklist = JSON.parse(localStorage.getItem(currentProject()));
+
+    //Form 
+    const oldFormTitle = Tasklist[thisRowIndex].title;
+    const oldFormPriority = Tasklist[thisRowIndex].priority;
+    const oldFormDueDate = Tasklist[thisRowIndex].dueDate;
+    const oldFormDescription = Tasklist[thisRowIndex].description;
+
+    console.log(oldFormTitle);
+
+    //open form
+    formPopup.style.display = "block";
+
+    //get value from input field
+    const projectTitleHTML = document.getElementById("taskTitle");
+    const projectPriorityHTML = document.getElementById("taskPriority");
+    const projectDueDateHTML = document.getElementById("taskDueDate");
+    const projectDescriptionHTML = document.getElementById("taskDescription");
+
+
+    //change input field
+    projectTitleHTML.value = `${oldFormTitle}`;
+    projectPriorityHTML.value = `${oldFormPriority}`;
+    projectDueDateHTML.value = `${oldFormDueDate}`;
+    projectDescriptionHTML.value = `${oldFormDescription}`;
+
+    //Need to find a way to delete old task only if form is submitted
+    //for now, hiding the cancel button during editing
+    closeBtn.style.display = "none";
+    
+    Tasklist.splice(thisRowIndex, 1);
+    const projectName = currentProject();
+    localStorage.setItem(projectName, JSON.stringify(Tasklist));
+
+
 }
 
 //delete task button
@@ -280,6 +333,7 @@ submitProjectBtn.addEventListener("click", (e) => {
 
     //clear input field
     projectTitleHTML.value = "";
+
 });
 
 //Add Project to UI
@@ -317,10 +371,12 @@ function addProjectUI(name) {
             let pcell02 = ptable.rows[ptable.rows.length - 1].insertCell();
             let pbutton1 = document.createElement('button');
             pcell02.append(pbutton1);
+            pbutton1.addEventListener("click", selectProjectFunction);
             //edit
             let pcell03 = ptable.rows[ptable.rows.length - 1].insertCell();
             let pbutton2 = document.createElement('button');
             pcell03.append(pbutton2);
+            pbutton2.addEventListener("click", editProjectFunction);
             //delete
             let pcell04 = ptable.rows[ptable.rows.length - 1].insertCell();
             let pbutton3 = document.createElement('button');
@@ -333,42 +389,55 @@ function addProjectUI(name) {
 
 //delete project button
 function deleteProjectFunction() {
+    //find Title of current row
     const thisRow = this.parentNode.parentNode;
     const thisRowTitle = (thisRow.cells[0].innerText);
     localStorage.removeItem(thisRowTitle);
 
-    // Tasklist.splice(thisRowIndex, 1);
-    // localStorage.setItem(projectName, JSON.stringify(Tasklist));
+    //reload To Do List
     addProjectUI();
-
 }
 
+//select project button
+function selectProjectFunction() {
+    //find Title of current row
+    const thisRow = this.parentNode.parentNode;
+    const thisRowTitle = (thisRow.cells[0].innerText);
+    localStorage.setItem("Current Project", JSON.stringify(thisRowTitle));
 
+    //reload To Do List
+    addTaskUI();
+}
 
-//Dummy Tasks for testing
+//edit project button
+function editProjectFunction() {
+    //find Title of current row
+    const thisRow = this.parentNode.parentNode;
+    const thisRowTitle = (thisRow.cells[0].innerText);
 
-//Set Current Project on Home Page to Personal for testing
+    const Tasklist = JSON.parse(localStorage.getItem(thisRowTitle));
+    show_prompt();
 
+    function show_prompt() {
+        var name = prompt('Please enter updated project name','');
+        if (name != null && name != "") {
+            //re-create project with new name
+            localStorage.removeItem(thisRowTitle);
+            localStorage.setItem(name, JSON.stringify(Tasklist));
 
+            //update TaskUI header if it's the current project 
+            if (currentProject() == thisRowTitle) {
+            localStorage.setItem("Current Project", JSON.stringify(name));
+            addTaskUI();
+            }
+        }
+    }    
+    addProjectUI();
+}
+localStorage.clear();
+//Set Current Project on Home Page to Personal if local Storage is empty
 currentProject();
-
-
-createProject("Work");
-
-addProjectUI("Work");
-
-
-assignTask('grocery shopping', 'a description', "11 30 2023", 2);
-
-assignTask('something', '', "", 2);
-
-
-// assignTask('Code this assignment', 'This TOP assignment', "11 01 2023", 2);
-
-// assignTask('gym every day', '', '', 7);
-
-// window.task4 = assignTask('sleep 8 hours', 'zzz', '', 2);
-
 addTaskUI();
-console.log("final", localStorage);
-// console.log("final Personal parse",JSON.parse(localStorage.getItem("Personal")));
+addProjectUI();
+
+
